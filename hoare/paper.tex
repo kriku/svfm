@@ -152,13 +152,15 @@ In 1969 paper Hoare didn't mentioned that Q should terminates, so he defined
 rules just for deducting partial correctness (particular in rule D3). But later
 he add definition for total correctness too. \\
 
-For example lets take task on finding real roots for quadratic equation.
+For example lets take task on finding real roots for quadratic equation:
+$$ ax^2 + bx + c = 0$$
 
-We limits input set according to discriminant and set of real numbers in
-predicate P. Then we could find values by some program Q. And finally check
+We limits input domain as set of real numbers and according to discriminant in
+predicate P:
+$$ P \equiv (a, b, c \in \mathbb{R}) \wedge (b^2 - 4ac \geq 0)$$
+
+Then we could find values by some program Q. And finally check
 whether equation holds or not in R. 
-
-
 
 \section{Axioms and Rules}
 
@@ -174,12 +176,9 @@ In the article Hoare states four basic rules:
   Rule of Iteration
 \end{itemize}
 
-
-
 Also it requires no side effects for Q (nothing changes except state which
 we define in pre and postconditions). Because in other case, we couldn't
 consider correctness of overall state. \\
-
 
 Using this rules we can make deductive proof from our premise to conclusion,
 that R will holds after execution. 
