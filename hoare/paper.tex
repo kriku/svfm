@@ -74,7 +74,8 @@
   \noindent
 
   This is review on C.A.R. Hoare's paper, An Axiomatic Basis for Computer
-  Programming. 
+  Programming.
+  (WIP)
   
 \end{abstract}
 }
@@ -156,11 +157,13 @@ For example lets take task on finding real roots for quadratic equation:
 $$ ax^2 + bx + c = 0$$
 
 We limits input domain as set of real numbers and according to discriminant in
-predicate P:
+predicate P (suppose we used general quadratic formula):
 $$ P \equiv (a, b, c \in \mathbb{R}) \wedge (b^2 - 4ac \geq 0)$$
 
-Then we could find values by some program Q. And finally check
-whether equation holds or not in R. 
+Then we could find values by some program Q.
+And finally check whether equation holds or not in R: 
+$$ R \equiv (X \subseteq \mathbb{R}) \wedge (\forall x \in X \bullet ax^2 + bx + c
+= 0)$$
 
 \section{Axioms and Rules}
 
