@@ -1,0 +1,242 @@
+\documentclass[twoside,twocolumn]{article}
+
+\usepackage{blindtext} % Package to generate dummy text throughout this template 
+
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\linespread{1.05} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[english]{babel} % Language hyphenation and typographical rules
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+
+\usepackage{enumitem} % Customized lists
+\setlist[itemize]{noitemsep} % Make itemize lists more compact
+
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+% \usepackage{fancyhdr} % Headers and footers
+% \pagestyle{fancy} % All pages have headers and footers
+% \fancyhead{} % Blank out the default header
+% \fancyfoot{} % Blank out the default footer
+% \fancyhead[C]{} % Custom header text
+% \fancyfoot[C]{\thepage} % Custom footer text
+
+\usepackage{dirtytalk}
+\renewcommand{\quote}[2]{
+  \say{
+    {\itshape #1}
+  }\\[.5em]
+  \rightline{{\rm --- #2}}
+
+  \vspace{1em}
+}
+
+\usepackage{titling} % Customizing the title section
+
+\usepackage{hyperref} % For hyperlinks in the PDF
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\setlength{\droptitle}{-4\baselineskip} % Move the title up
+
+\pretitle{\begin{center}\Large\bfseries} % Article title formatting
+\posttitle{\end{center}} % Article title closing formatting
+\title{An Axiomatic Basis for Computer Programming: Review} % Article title
+\author{%
+\textsc{Gosha Krikun}\\[1ex] % Your name
+\normalsize Innopolis University\\ % Your institution
+\normalsize \href{mailto:g.krikun@innopolis.ru}{g.krikun@innopolis.ru} % Your email address
+%\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
+%\textsc{Jane Smith}\thanks{Corresponding author} \\[1ex] % Second author's name
+%\normalsize University of Utah \\ % Second author's institution
+%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
+}
+% \date{February 10, 2017} % Leave empty to omit a date
+\date{\today}
+\renewcommand{\maketitlehookd}{%
+\begin{abstract}
+  \noindent
+
+  This is review on C.A.R. Hoare's paper, An Axiomatic Basis for Computer
+  Programming. 
+  
+\end{abstract}
+}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+% Print the title
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+``People are not perfect'', this is what we learned so fourth. 
+Every one could make a mistake. In some areas it could be unnoticed, but in
+others it could cause serious consequences.
+
+There are a lot of people with their needs. Majority of them lie outside
+safety-critical sector, error and failures in which could leads to deaths. 
+People won't spent big money for time of qualified developers to avoid minor
+bugs. 
+
+So nowadays main approach to find failures and errors is testing.
+And I can't not mentioned my favorite quote about it:\\
+
+\quote{
+Program testing can be used to show the presence of bugs, but never to show their absence!
+}{Edsger Wybe Dijkstra}
+
+But more and more critical tasks entrust to computer systems. When errors and
+failures cost increases, we will pay for diligence and accuracy as much as
+needed.
+
+To be exactly sure, that we don't make mistakes we make premises and develop techniques for
+reasoning about properties and correctness. And for proving it we used our logic
+and deduction.  
+
+\section{Purpose and Applications}
+
+So Hoare suggested triple \{P\} Q \{R\} \cite{hoare:69} in which developer need
+define 
+precondition (premises) and postcondition (conclusion) which hold for program Q
+after execution. 
+
+This technique helps prove correctness of a program Q, according to defined
+logical predicates P and R.
+
+It doesn't help derive true predicates from requirements, but it
+provide ability to use common proof techniques for deducting correctness.
+
+For next disscussion suppose that we define right P and R from some
+requirements. \\
+
+Speaking about correctness we should understand, that any answer could be in
+three state: answer received and it is correct, answer not received, answer is
+incorrect.  
+
+So when answer received and it is right, for all input values in the domain,
+then we call it total correctness.
+
+If answer could be not received (e.g. program doesn't terminate) for some values
+in the domain, but is right for others - partial correctness.
+
+And incorrectness in last case. \\
+
+Using axioms and inference rules what was proposed by Hoare, we could deduct
+that if P holds before execution of Q, and if Q terminates, then R will holds
+after execution (correctness of Q).\\
+
+In 1969 paper Hoare didn't mentioned that Q should terminates, so he defined
+rules just for deducting partial correctness (particular in rule D3). But later
+he add definition for total correctness too. \\
+
+For example lets take task on finding real roots for quadratic equation.
+
+We limits input set according to discriminant and set of real numbers in
+predicate P. Then we could find values by some program Q. And finally check
+whether equation holds or not in R. 
+
+
+
+\section{Axioms and Rules}
+
+In the article Hoare states four basic rules:
+\begin{itemize}
+\item
+  Axiom of Assignment
+\item
+  Rule of Consequence
+\item
+  Rule of Composition
+\item
+  Rule of Iteration
+\end{itemize}
+
+
+
+Also it requires no side effects for Q (nothing changes except state which
+we define in pre and postconditions). Because in other case, we couldn't
+consider correctness of overall state. \\
+
+
+Using this rules we can make deductive proof from our premise to conclusion,
+that R will holds after execution. 
+
+But only after, not during.
+
+It could be a case when program Q during execution
+change state which doesn't hold conditions P and R.
+
+This case could appear when specification describe something in general, but
+doesn't divide execution into small pieces of actions.
+
+If we think about it in more details, we could decompose it to two sequence of
+statements (rule of composition D2), in which first part hold some postcondition
+R1 and second have R1 as precondition.
+
+So nothing scary in that case if we still could prove correctness of our program.
+
+P like a guard, filter input on what program will work correctly, and R check
+results to be correct. 
+
+% But sometimes it could be not so straightforward. Lets return to our example
+% about real roots. Suppose quadratic coefficient a could be equals 0. 
+
+% In that case equation is linear but still valid, there is solution when equation holds.
+% But if we solve it by general formula (formula) 
+
+% Rules.
+% There is set of rules (or axioms) which we could use to deduct correctness of a program.
+
+
+However precondition and postconditions could be almost same. This looks ugly.
+
+firstly we should define the
+truth. 
+
+So directed tests could show that implementation isn't work properly. This is
+helpful during development and evolving software product.
+
+
+%------------------------------------------------
+
+
+
+\section{Shortcomings}
+
+\section{Conclusion}
+
+\begin{thebibliography}{99} % Bibliography - this is intentionally simple in this template
+
+\bibitem[Hoa69]{hoare:69}
+C.~Antony~R. Hoare.
+\newblock An axiomatic basis for computer programming.
+\newblock {\em Communications of the ACM}, 12(10):576--580, 1969.
+
+\end{thebibliography}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
