@@ -119,20 +119,20 @@ and deduction.
 
 \section{Purpose and Applications}
 
-So Hoare suggested triple \{P\} Q \{R\} \cite{hoare:69} in which developer need
+So Hoare suggested triple $\{P\} Q \{R\}$ % \cite{hoare:69}
+in which developer need
 define precondition (premises) and postcondition (conclusion) which hold for
-program Q after execution.  
+program $Q$ after execution.  
 
-This technique helps prove correctness of a program Q, according to defined
-logical predicates P and R.
+This technique helps prove correctness of a program $Q$, according to defined
+logical predicates $P$ and $R$.
 
 It doesn't help derive true predicates from requirements, but it
 provide ability to use common proof techniques for deducting correctness.
+In other words, it helps us check that program do things right, but doesn't
+affirm that what we want, is right things.
 
-Or in other words, it helps us check that program do things right, but doesn't
-approve that what we want, is right things.
-
-For next discussion suppose that we define right P and R from some
+For next discussion suppose that we define right $P$ and $R$ from some
 requirements. \\
 
 Speaking about correctness we should understand, that any answer could be in
@@ -148,25 +148,28 @@ in the domain, but is right for others - partial correctness.
 And incorrectness in last case. \\
 
 Using axioms and inference rules what was proposed by Hoare, we could deduct
-that if P holds before execution of Q, and if Q terminates, then R will holds
-after execution (correctness of Q).\\
+that if $P$ holds before execution of $Q$, and if $Q$ terminates, then $R$ will
+holds after execution (correctness of $Q$).
 
-In 1969 paper Hoare didn't mentioned that Q should terminates, so he defined
+In 1969 paper Hoare didn't mentioned that $Q$ should terminates, so he defined
 rules just for deducting partial correctness (particular in rule D3). But later
-he add definition for total correctness too. \\
+he add definition for total correctness too.
 
 For example lets take task on finding real roots for quadratic equation:
 $$ ax^2 + bx + c = 0$$
 
-We limits input domain as set of real numbers and according to discriminant in
-predicate P (suppose we used general quadratic formula):
+We restrict input domain as set of real numbers and according to discriminant in
+predicate $P$ (suppose we used general quadratic formula):
 $$ P \equiv (a, b, c \in \mathbb{R}) \wedge (b^2 - 4ac \geq 0)$$
 
-Then we could find values by some program Q. Suppose as a result program returns
-set of values X (Don't think about implementation yet).
+Then we could find values by some program $Q$. Suppose as a result program
+returns set of values $X$ (Don't think about implementation yet).
 And finally check whether equation holds or not in R: 
 $$ R \equiv (X \subseteq \mathbb{R}) \wedge (\forall x \in X \bullet ax^2 + bx + c
 = 0)$$
+
+$P$ like a guard, filter input on what program will work correctly, and $R$
+check results to be correct. 
 
 \section{Axioms and Rules}
 
@@ -181,46 +184,68 @@ In the '69 article Hoare states four basic rules:
 \item
   Rule of Iteration
 \end{itemize}
-But sometimes stated another two rules - skip axiom and condition rule. First
-one could be derived from axiom of assignment, and second from rule of
-iteration.\\
+But sometimes another two rules is stated - Skip Axiom and Condition Rule. First
+one could be derived from Axiom of Assignment, and second from Rule of
+Iteration.\\
 
-All this rules implicitly assumed the absence of side effects for Q (nothing
+All this rules implicitly assumed the absence of side effects for $Q$ (nothing
 changes except state which we define in pre and postconditions). Because in
 other case, we couldn't consider correctness of overall state. \\ 
 
 Using this rules we can make deductive proof from our premise to conclusion,
-that R will holds after execution. 
+that $R$ will holds after execution. 
 
 But only after, not during.
 
-It could be a case when program Q during execution
-change state which doesn't hold conditions P and R.
+It could be a case when program $Q$ during execution
+change state which doesn't hold conditions $P$ and $R$.
 
 This case could appear when specification describe something in general, but
 doesn't divide execution into small pieces of actions.
 
 If we think about it in more details, we could decompose it to two sequence of
-statements (rule of composition D2), in which first part hold some postcondition
-R1 and second have R1 as precondition. But R1 could be arbitrary, for example
-$\not$ P.
+statements (by rule of composition D2), in which first part hold some postcondition
+$R_1$ and second have $R_1$ as precondition. But $R_1$ could be arbitrary, for example
+$\neg P$.
 
-As we can see, there is nothing scary in that case if we still could prove
-correctness of our program. 
+As we can see, there is nothing scary in this case if we still could prove
+correctness of our program. \\
 
-So now lets return to our example about real roots.
+Lets return to our example about real roots.
 
 Suppose we choose general quadratic formula for solving equation:
+$$ x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
 
-$$ x_{1,2} = \frac{-b +- \square{b^2 - 4ac}}{2a}$$
+We know that $b^2 - 4ac$ not negative, but we
+don't know weather $a$ is equals to zero.
+In this case equation became linear, but still have solutions. 
 
-We know that $b^2 - 4ac$ not negative, but we don't know weather a is equals to
-zero. In this case equation became linear, but still have solutions.
+Suppose we didn't see that general formula is derived from equation. Lets just
+apply substitution all occurrence of $x$ in postcondition by stated expressions.
 
-Lets try use substitution of x by this to prove that postcondition holds.
+After polynomial expansion we could see that equation takes the form:
+$$\frac{b^2}{2a} \mp \frac{b\sqrt{b^2 - 4ac}}{2a} - c - \frac{b^2}{2a} \pm
+\frac{b\sqrt{b^2 - 4ac}}{2a} + c = 0$$
 
-P like a guard, filter input on what program will work correctly, and R check
-results to be correct. 
+I little bit cheated, because I already reduce some parts by $a$, but
+nevertheless, after reducing the remaining we get:
+$$ 0 = 0 $$
+
+But we should remember, that we could reduce only by not zero value, thus
+postcondition holds only if $a \neq 0$.
+
+Lets predicate $B \equiv a \neq 0$, then precondition for our statement:
+$$ P_1 \equiv P \wedge B $$
+
+By the manipulations above we actually proved that our statement correct, with
+respect to precondition $P_1$ and postcondition $R$.
+
+Actually we could replace whole program with one assignment:
+$$ X = \emptyset $$
+
+And it will be correct program, according to specification. That's why I
+stressed that it doesn't help obtain right predicates. 
+
 
 % But sometimes it could be not so straightforward. Lets return to our example
 % about real roots. Suppose quadratic coefficient a could be equals 0. 
@@ -231,13 +256,13 @@ results to be correct.
 % Rules.
 % There is set of rules (or axioms) which we could use to deduct correctness of a program.
 
-However precondition and postconditions could be almost same. This looks ugly.
+% However precondition and postconditions could be almost same. This looks ugly.
 
-firstly we should define the
-truth. 
+% firstly we should define the
+% truth. 
 
-So directed tests could show that implementation isn't work properly. This is
-helpful during development and evolving software product.
+% So directed tests could show that implementation isn't work properly. This is
+% helpful during development and evolving software product.
 
 
 %------------------------------------------------
