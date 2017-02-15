@@ -120,9 +120,8 @@ and deduction.
 \section{Purpose and Applications}
 
 So Hoare suggested triple \{P\} Q \{R\} \cite{hoare:69} in which developer need
-define 
-precondition (premises) and postcondition (conclusion) which hold for program Q
-after execution. 
+define precondition (premises) and postcondition (conclusion) which hold for
+program Q after execution.  
 
 This technique helps prove correctness of a program Q, according to defined
 logical predicates P and R.
@@ -130,7 +129,10 @@ logical predicates P and R.
 It doesn't help derive true predicates from requirements, but it
 provide ability to use common proof techniques for deducting correctness.
 
-For next disscussion suppose that we define right P and R from some
+Or in other words, it helps us check that program do things right, but doesn't
+approve that what we want, is right things.
+
+For next discussion suppose that we define right P and R from some
 requirements. \\
 
 Speaking about correctness we should understand, that any answer could be in
@@ -160,14 +162,15 @@ We limits input domain as set of real numbers and according to discriminant in
 predicate P (suppose we used general quadratic formula):
 $$ P \equiv (a, b, c \in \mathbb{R}) \wedge (b^2 - 4ac \geq 0)$$
 
-Then we could find values by some program Q.
+Then we could find values by some program Q. Suppose as a result program returns
+set of values X (Don't think about implementation yet).
 And finally check whether equation holds or not in R: 
 $$ R \equiv (X \subseteq \mathbb{R}) \wedge (\forall x \in X \bullet ax^2 + bx + c
 = 0)$$
 
 \section{Axioms and Rules}
 
-In the article Hoare states four basic rules:
+In the '69 article Hoare states four basic rules:
 \begin{itemize}
 \item
   Axiom of Assignment
@@ -178,10 +181,13 @@ In the article Hoare states four basic rules:
 \item
   Rule of Iteration
 \end{itemize}
+But sometimes stated another two rules - skip axiom and condition rule. First
+one could be derived from axiom of assignment, and second from rule of
+iteration.\\
 
-Also it requires no side effects for Q (nothing changes except state which
-we define in pre and postconditions). Because in other case, we couldn't
-consider correctness of overall state. \\
+All this rules implicitly assumed the absence of side effects for Q (nothing
+changes except state which we define in pre and postconditions). Because in
+other case, we couldn't consider correctness of overall state. \\ 
 
 Using this rules we can make deductive proof from our premise to conclusion,
 that R will holds after execution. 
@@ -196,9 +202,22 @@ doesn't divide execution into small pieces of actions.
 
 If we think about it in more details, we could decompose it to two sequence of
 statements (rule of composition D2), in which first part hold some postcondition
-R1 and second have R1 as precondition.
+R1 and second have R1 as precondition. But R1 could be arbitrary, for example
+$\not$ P.
 
-So nothing scary in that case if we still could prove correctness of our program.
+As we can see, there is nothing scary in that case if we still could prove
+correctness of our program. 
+
+So now lets return to our example about real roots.
+
+Suppose we choose general quadratic formula for solving equation:
+
+$$ x_{1,2} = \frac{-b +- \square{b^2 - 4ac}}{2a}$$
+
+We know that $b^2 - 4ac$ not negative, but we don't know weather a is equals to
+zero. In this case equation became linear, but still have solutions.
+
+Lets try use substitution of x by this to prove that postcondition holds.
 
 P like a guard, filter input on what program will work correctly, and R check
 results to be correct. 
@@ -211,7 +230,6 @@ results to be correct.
 
 % Rules.
 % There is set of rules (or axioms) which we could use to deduct correctness of a program.
-
 
 However precondition and postconditions could be almost same. This looks ugly.
 
