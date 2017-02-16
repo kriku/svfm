@@ -35,6 +35,9 @@
 % \fancyhead[C]{} % Custom header text
 % \fancyfoot[C]{\thepage} % Custom footer text
 
+\usepackage{amsmath, amsfonts}
+\renewcommand{\implies}{\Rightarrow}
+
 \usepackage{dirtytalk}
 \renewcommand{\quote}[2]{
   \say{
@@ -117,6 +120,8 @@ To be exactly sure, that we don't make mistakes we make premises and develop tec
 reasoning about properties and correctness. And for proving it we used our logic
 and deduction.  
 
+%------------------------------------------------
+
 \section{Purpose and Applications}
 
 So Hoare suggested triple $\{P\} Q \{R\}$ % \cite{hoare:69}
@@ -171,6 +176,8 @@ $$ R \equiv (X \subseteq \mathbb{R}) \wedge (\forall x \in X \bullet ax^2 + bx +
 $P$ like a guard, filter input on what program will work correctly, and $R$
 check results to be correct. 
 
+%------------------------------------------------
+
 \section{Axioms and Rules}
 
 In the '69 article Hoare states four basic rules:
@@ -214,14 +221,16 @@ correctness of our program. \\
 Lets return to our example about real roots.
 
 Suppose we choose general quadratic formula for solving equation:
-$$ x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+\begin{equation}
+ x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+\end{equation}
 
 We know that $b^2 - 4ac$ not negative, but we
 don't know weather $a$ is equals to zero.
 In this case equation became linear, but still have solutions. 
 
 Suppose we didn't see that general formula is derived from equation. Lets just
-apply substitution all occurrence of $x$ in postcondition by stated expressions.
+apply substitution all occurrence of $x$ in postcondition by stated expression (1).
 
 After polynomial expansion we could see that equation takes the form:
 $$\frac{b^2}{2a} \mp \frac{b\sqrt{b^2 - 4ac}}{2a} - c - \frac{b^2}{2a} \pm
@@ -234,8 +243,8 @@ $$ 0 = 0 $$
 But we should remember, that we could reduce only by not zero value, thus
 postcondition holds only if $a \neq 0$.
 
-Lets predicate $B \equiv a \neq 0$, then precondition for our statement:
-$$ P_1 \equiv P \wedge B $$
+Lets predicate $A \equiv a \neq 0$, then precondition for our statement:
+$$ P_1 \equiv P \wedge A $$
 
 By the manipulations above we actually proved that our statement correct, with
 respect to precondition $P_1$ and postcondition $R$.
@@ -249,10 +258,8 @@ So we could make preconditions stronger, program will still be correct.
 
 With postcondition predicates, on the contrary, we couldn't make it
 stronger.
-
 Because if we don't change program $Q$, it will produce range of
 results, which satisfy weaker predicate.
-
 This range is superset of set which satisfy stronger predicate.
 
 So $Q$ will produce values which don't satisfy postcondition - program will be
@@ -260,35 +267,71 @@ incorrect according to stronger predicate.
 
 But we could make postcondition weaker, program will still be correct.
 
-This is actually Rule of Consequence stated in Hoare paper.
+This is actually Rule of Consequence stated in Hoare paper.\\
 
 But lets return to our example.
 
 % We prove correctness of statement on conditions $P_!$ and $Q$. But we should
 % consider 
 
-In case when $x = 0$ (or $P \wedge \neg B$) equation takes the form:
-$$ bx + c = 0 \text{, and } x = \frac{-c}{b}$$
+In case when $x = 0$ (or $P \wedge \neg A$) equation takes the form:
+\begin{equation}
+ bx + c = 0 \text{, and } x = \frac{-c}{b}
+\end{equation}
 
-Yet again this remains true when $C \equiv b \neq 0$ is true, so this statement
-is correct according to precondition $P \wedge \neg B \wedge C$ and
+Yet again, this remains true when $B \equiv b \neq 0$ is true, so this statement
+is correct according to precondition $P \wedge \neg A \wedge B$ and
 postcondition $R$.
 
 As you can see, we try discharge proof by cases, and then, using Condition
 Rule (or Rule of Iteration), prove correctness of their combination.
 
-In case when $b = 0$ or $\neg C$, equation takes the form:
+In case when $b = 0$ or $\neg B$, equation takes the form:
 $$ c = 0$$
 
-Either $c = 0$ and equation holds for all $x \in \mathbb{R}$, or $c \neq 0$ and
-equation 
+And again, two cases. Either $c = 0$ and equation holds for all
+$x \in \mathbb{R}$:
+\begin{equation}
+  X = \mathbb{R}
+\end{equation}
+
+Or $c \neq 0$ and equation doesn't have solutions:
+\begin{equation}
+  X = \emptyset
+\end{equation}
+
+So lets combine this four statements and prove correctness of our program.
+
+We will use Condition Rule, which could be derived from Rule of Iteration:
+$$\frac{\{P \wedge A\} Q_1 \{R\}, \{P \wedge \neg A\} Q \{R\}}
+{\{P\} \textbf{ if } A \textbf{ then } Q_1 \textbf{ else } Q \textbf{ end } \{R\}}$$
+
+$Q_1$ correspond to equation (1), $Q_2$ to (2) and so on. $Q$ represent
+nested statements:
 
 
-Actually we could replace whole program with one assignment:
+Therefore, we prove that program holds postcondition $R$ for all values
+satisfying $P$ and it is total correct:
+\begin{align*}
+  \{P\} & \textbf{ if } A \textbf{ then } Q_1 \textbf{ else } \\
+        & \hspace{1em} \textbf{ if } B \textbf{ then } Q_2 \\
+        & \hspace{2em} \textbf{ if } C \textbf{ then } Q_3 \textbf { else } Q_4 \textbf { end } \\
+        & \hspace{1em} \textbf{ end }\\
+        & \textbf{ end } \{R\}
+\end{align*}
+
+\rightline{{\rm $\Box$}}
+
+%------------------------------------------------
+
+Actually we could replace whole program with just one assignment:
 $$ X = \emptyset $$
 
-And it will be correct program, according to specification. That's why I
-stressed that it doesn't help obtain right predicates. 
+And prove it correctness according to $P$ and $R$ too, because universal
+quantification expressed that every member of domain is satisfied some
+predicate. This is true, when there is no members.
+
+That's why I stressed that it doesn't help obtain right predicates. 
 
 
 
