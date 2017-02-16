@@ -76,9 +76,13 @@
 \begin{abstract}
   \noindent
 
-  This is review on C.A.R. Hoare's paper, An Axiomatic Basis for Computer
-  Programming.
-  (WIP)
+  This paper is review on C.A.R. Hoare's paper, An Axiomatic Basis for Computer
+  Programming \cite{hoare:69}.
+
+  Basically an attempt is made to apply technique for reasoning about fictional
+  example.
+
+  
   
 \end{abstract}
 }
@@ -97,7 +101,7 @@
 \section{Introduction}
 
 ``People are not perfect'', this is what we learned so fourth. 
-Every one could make a mistake. In some areas it could be unnoticed, but in
+Everyone could make a mistake. In some areas it could be unnoticed, but in
 others it could cause serious consequences.
 
 There are a lot of people with their needs. Majority of them lie outside
@@ -114,7 +118,7 @@ Program testing can be used to show the presence of bugs, but never to show thei
 
 But more and more critical tasks entrust to computer systems. When errors and
 failures cost increases, we will pay for diligence and accuracy as much as
-needed.
+needed.\\
 
 To be exactly sure, that we don't make mistakes we make premises and develop techniques for
 reasoning about properties and correctness. And for proving it we used our logic
@@ -127,7 +131,9 @@ and deduction.
 So Hoare suggested triple $\{P\} Q \{R\}$ % \cite{hoare:69}
 in which developer need
 define precondition (premises) and postcondition (conclusion) which hold for
-program $Q$ after execution.  
+program $Q$ after execution.
+
+Also he state axioms and rules to make inference about statements.
 
 This technique helps prove correctness of a program $Q$, according to defined
 logical predicates $P$ and $R$.
@@ -142,7 +148,7 @@ requirements. \\
 
 Speaking about correctness we should understand, that any answer could be in
 three state: answer received and it is correct, answer not received, answer is
-incorrect.  
+incorrect. 
 
 So when answer received and it is right, for all input values in the domain,
 then we call it total correctness.
@@ -158,17 +164,18 @@ holds after execution (correctness of $Q$).
 
 In 1969 paper Hoare didn't mentioned that $Q$ should terminates, so he defined
 rules just for deducting partial correctness (particular in rule D3). But later
-he add definition for total correctness too.
+he add definition for total correctness too. \\
 
 For example lets take task on finding real roots for quadratic equation:
 $$ ax^2 + bx + c = 0$$
 
 We restrict input domain as set of real numbers and according to discriminant in
-predicate $P$ (suppose we used general quadratic formula):
+predicate $P$ (suppose we used general quadratic formula and restrict domain by
+cases in which equation has real roots):
 $$ P \equiv (a, b, c \in \mathbb{R}) \wedge (b^2 - 4ac \geq 0)$$
 
 Then we could find values by some program $Q$. Suppose as a result program
-returns set of values $X$ (Don't think about implementation yet).
+returns set of values $X$.
 And finally check whether equation holds or not in R: 
 $$ R \equiv (X \subseteq \mathbb{R}) \wedge (\forall x \in X \bullet ax^2 + bx + c
 = 0)$$
@@ -197,7 +204,7 @@ Iteration.\\
 
 All this rules implicitly assumed the absence of side effects for $Q$ (nothing
 changes except state which we define in pre and postconditions). Because in
-other case, we couldn't consider correctness of overall state. \\ 
+other case, we couldn't consider correctness of overall state. 
 
 Using this rules we can make deductive proof from our premise to conclusion,
 that $R$ will holds after execution. 
@@ -222,15 +229,16 @@ Lets return to our example about real roots.
 
 Suppose we choose general quadratic formula for solving equation:
 \begin{equation}
- x_{1,2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}
+ X = \Big\{ \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \Big\}
 \end{equation}
 
 We know that $b^2 - 4ac$ not negative, but we
 don't know weather $a$ is equals to zero.
 In this case equation became linear, but still have solutions. 
 
-Suppose we didn't see that general formula is derived from equation. Lets just
-apply substitution all occurrence of $x$ in postcondition by stated expression (1).
+Suppose we didn't see that general formula is directly derived from equation.
+Lets just apply substitution all occurrence of $x$ in postcondition by stated
+expression (1). \\
 
 After polynomial expansion we could see that equation takes the form:
 $$\frac{b^2}{2a} \mp \frac{b\sqrt{b^2 - 4ac}}{2a} - c - \frac{b^2}{2a} \pm
@@ -247,9 +255,9 @@ Lets predicate $A \equiv a \neq 0$, then precondition for our statement:
 $$ P_1 \equiv P \wedge A $$
 
 By the manipulations above we actually proved that our statement correct, with
-respect to precondition $P_1$ and postcondition $R$.
+respect to precondition $P_1$ and postcondition $R$. \\
 
-And we could notice that predicate $P_1$ is stronger that predicate $P$. By
+We could notice that predicate $P_1$ is stronger that predicate $P$. By
 ``stronger'' we mean that $P_1 \implies P$, or informally, if predicate $P_1$
 holds for some values, predicate $P$ will holds either. But opposite is not true
 (in our case $x = 0$ doesn't hold in $P_1$).
@@ -264,10 +272,9 @@ This range is superset of set which satisfy stronger predicate.
 
 So $Q$ will produce values which don't satisfy postcondition - program will be
 incorrect according to stronger predicate.
-
 But we could make postcondition weaker, program will still be correct.
 
-This is actually Rule of Consequence stated in Hoare paper.\\
+This is Rule of Consequence, stated in Hoare paper.\\
 
 But lets return to our example.
 
@@ -276,14 +283,14 @@ But lets return to our example.
 
 In case when $x = 0$ (or $P \wedge \neg A$) equation takes the form:
 \begin{equation}
- bx + c = 0 \text{, and } x = \frac{-c}{b}
+  bx + c = 0 \text{, and set } X = \Big\{ \frac{-c}{b} \Big\}
 \end{equation}
 
 Yet again, this remains true when $B \equiv b \neq 0$ is true, so this statement
 is correct according to precondition $P \wedge \neg A \wedge B$ and
-postcondition $R$.
+postcondition $R$. \\
 
-As you can see, we try discharge proof by cases, and then, using Condition
+As you can see, we try to discharge proof by cases, and then, using Condition
 Rule (or Rule of Iteration), prove correctness of their combination.
 
 In case when $b = 0$ or $\neg B$, equation takes the form:
@@ -291,6 +298,7 @@ $$ c = 0$$
 
 And again, two cases. Either $c = 0$ and equation holds for all
 $x \in \mathbb{R}$:
+
 \begin{equation}
   X = \mathbb{R}
 \end{equation}
@@ -300,15 +308,16 @@ Or $c \neq 0$ and equation doesn't have solutions:
   X = \emptyset
 \end{equation}
 
-So lets combine this four statements and prove correctness of our program.
+So lets combine this four statements and prove correctness of our program. \\
 
 We will use Condition Rule, which could be derived from Rule of Iteration:
 $$\frac{\{P \wedge A\} Q_1 \{R\}, \{P \wedge \neg A\} Q \{R\}}
 {\{P\} \textbf{ if } A \textbf{ then } Q_1 \textbf{ else } Q \textbf{ end } \{R\}}$$
 
 $Q_1$ correspond to equation (1), $Q_2$ to (2) and so on. $Q$ represent
-nested statements:
+nested statements, including control structures and statements $Q_2, Q_3, Q_4$.
 
+In the same way we prove that $Q$ is correct.\\
 
 Therefore, we prove that program holds postcondition $R$ for all values
 satisfying $P$ and it is total correct:
@@ -321,22 +330,20 @@ satisfying $P$ and it is total correct:
 \end{align*}
 
 \rightline{{\rm $\Box$}}
+\vspace{1em}
 
-%------------------------------------------------
+That's it. With one significant remark.
 
-Actually we could replace whole program with just one assignment:
+Actually we could replace whole program
+by just one assignment: 
 $$ X = \emptyset $$
 
 And prove it correctness according to $P$ and $R$ too, because universal
 quantification expressed that every member of domain is satisfied some
-predicate. This is true, when there is no members.
+predicate. This is true, when there is no members. \\
 
-That's why I stressed that it doesn't help obtain right predicates. 
-
-
-
-% But sometimes it could be not so straightforward. Lets return to our example
-% about real roots. Suppose quadratic coefficient a could be equals 0. 
+\textit{That's why I stressed, that it doesn't help obtain right predicates. }
+%------------------------------------------------
 
 % In that case equation is linear but still valid, there is solution when equation holds.
 % But if we solve it by general formula (formula) 
@@ -344,22 +351,53 @@ That's why I stressed that it doesn't help obtain right predicates.
 % Rules.
 % There is set of rules (or axioms) which we could use to deduct correctness of a program.
 
-% However precondition and postconditions could be almost same. This looks ugly.
-
-% firstly we should define the
-% truth. 
-
 % So directed tests could show that implementation isn't work properly. This is
 % helpful during development and evolving software product.
 
-
 %------------------------------------------------
-
-
 
 \section{Shortcomings}
 
+As we can see with equation example, deriving good pre and postconditions is not
+trivial task. It could be ambiguous when done wrong.
+
+The first thing that comes to mind change postcondition:
+$$ R^\prime \equiv R \wedge \neg(\exists x \not\in X \bullet ax^2 + bx + c = 0)$$
+
+To check that program returns all solutions to equation. But, in practice it
+very difficult prove existential quantification's.
+
+Also quantifiers cannot be expressed as boolean expression in ordinary
+languages, which doesn't support it \cite{meyer:90}.
+
+So defining predicates is weak part of method overall.
+
+% But as soon as we stated right one, we could gain confidence in reliability and
+% correctness of our software, as much as we believe in deductive logic.
+
+%------------------------------------------------
+
 \section{Conclusion}
+
+Verification software in general is difficult task.
+
+With constantly increases complexity of software and it dependencies is hard to
+tell certainly, whether particular program will accomplish task right or not. 
+
+This proof technique not only had a great influence on evolution of software
+verification, but also alleviate some of the other problems which exist in
+computing word.
+
+Strict definition of subroutines' variables before and after execution, helps
+understand purpose and accomplishment for potential user.
+
+Lets not forget that Halting problem is undecidable over Turing machines.
+
+With technique which Hoare suggests we can prove total correctness of program.
+
+But after all, we can gain confidence in reliability and correctness of our
+software as much as we believe in deductive logic, validity of our
+assumptions and reliability of the electronics.
 
 \begin{thebibliography}{99} % Bibliography - this is intentionally simple in this template
 
@@ -367,6 +405,11 @@ That's why I stressed that it doesn't help obtain right predicates.
 C.~Antony~R. Hoare.
 \newblock An axiomatic basis for computer programming.
 \newblock {\em Communications of the ACM}, 12(10):576--580, 1969.
+
+\bibitem[Mey90]{meyer:90}
+Bertrand Meyer.
+\newblock Introduction to the Theory of Programming Languages.
+\newblock {\em Prentice-Hall, Inc.}, 0-13-498510-9, 1990.
 
 \end{thebibliography}
 
