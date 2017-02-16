@@ -240,11 +240,56 @@ $$ P_1 \equiv P \wedge B $$
 By the manipulations above we actually proved that our statement correct, with
 respect to precondition $P_1$ and postcondition $R$.
 
+And we could notice that predicate $P_1$ is stronger that predicate $P$. By
+``stronger'' we mean that $P_1 \implies P$, or informally, if predicate $P_1$
+holds for some values, predicate $P$ will holds either. But opposite is not true
+(in our case $x = 0$ doesn't hold in $P_1$).
+
+So we could make preconditions stronger, program will still be correct.
+
+With postcondition predicates, on the contrary, we couldn't make it
+stronger.
+
+Because if we don't change program $Q$, it will produce range of
+results, which satisfy weaker predicate.
+
+This range is superset of set which satisfy stronger predicate.
+
+So $Q$ will produce values which don't satisfy postcondition - program will be
+incorrect according to stronger predicate.
+
+But we could make postcondition weaker, program will still be correct.
+
+This is actually Rule of Consequence stated in Hoare paper.
+
+But lets return to our example.
+
+% We prove correctness of statement on conditions $P_!$ and $Q$. But we should
+% consider 
+
+In case when $x = 0$ (or $P \wedge \neg B$) equation takes the form:
+$$ bx + c = 0 \text{, and } x = \frac{-c}{b}$$
+
+Yet again this remains true when $C \equiv b \neq 0$ is true, so this statement
+is correct according to precondition $P \wedge \neg B \wedge C$ and
+postcondition $R$.
+
+As you can see, we try discharge proof by cases, and then, using Condition
+Rule (or Rule of Iteration), prove correctness of their combination.
+
+In case when $b = 0$ or $\neg C$, equation takes the form:
+$$ c = 0$$
+
+Either $c = 0$ and equation holds for all $x \in \mathbb{R}$, or $c \neq 0$ and
+equation 
+
+
 Actually we could replace whole program with one assignment:
 $$ X = \emptyset $$
 
 And it will be correct program, according to specification. That's why I
 stressed that it doesn't help obtain right predicates. 
+
 
 
 % But sometimes it could be not so straightforward. Lets return to our example
