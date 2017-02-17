@@ -368,9 +368,11 @@ To check that program returns all solutions to equation. But, in practice it
 very difficult prove existential quantification's.
 
 Also quantifiers cannot be expressed as boolean expression in ordinary
-languages, which doesn't support it \cite{meyer:90}.
+languages, which doesn't support it \cite{meyer:90}.\\
 
-So defining predicates is weak part of method overall.
+Another disadvantage of software verification and modeling overall is a cost.
+Because it requires much more precision and rigor, they are always going to be
+more expensive than traditional approaches to engineering. 
 
 % But as soon as we stated right one, we could gain confidence in reliability and
 % correctness of our software, as much as we believe in deductive logic.
@@ -384,20 +386,45 @@ Verification software in general is difficult task.
 With constantly increases complexity of software and it dependencies is hard to
 tell certainly, whether particular program will accomplish task right or not. 
 
+Nowadays nobody writes code from scratch. We rely on quality of underlying
+layers. But we can't prove correctness for our program, until we prove
+correctness for all underlying layers. \\
+
+It could be the case, when we don't want to spent huge amount of time to prove
+software, but not in critical industries. The fundamental basis is required in
+these areas.
+
+Like with the bricks, we need to construct base for next level of abstraction,
+proving that we don't make mistake which could cost lives.
+Can be used different techniques of proof. But most important thing is to be
+confident in theory and in practice.
+\\
+
 This proof technique not only had a great influence on evolution of software
-verification, but also alleviate some of the other problems which exist in
-computing word.
+verification, but also alleviate some of the other difficulties which appears in 
+computing word.\\
 
-Strict definition of subroutines' variables before and after execution, helps
-understand purpose and accomplishment for potential user.
+One of them is a documentation of source code.
+Strict definition of subroutine's variables before and after execution, helps
+potential user understand purpose and how use it.
 
-Lets not forget that Halting problem is undecidable over Turing machines.
+It might be a better documentation than the description written at four pages.
 
-With technique which Hoare suggests we can prove total correctness of program.
+Because in principle we don't need understand how to work black box inside, if
+we sure how we can use it outside.
+Understanding will come with time.
+\\
 
-But after all, we can gain confidence in reliability and correctness of our
-software as much as we believe in deductive logic, validity of our
-assumptions and reliability of the electronics.
+Another issue is maintenance existing code base.
+First of all, we won't receive messages about errors, will not spent time on
+fixing and debugging. 
+
+We will spend time on modeling and proofs instead.
+\\
+
+Slowly but surely, after all, we will gain confidence in reliability and
+correctness of our software as much as we believe in deductive logic, validity
+of our assumptions and reliability of the electronics.
 
 \begin{thebibliography}{99} % Bibliography - this is intentionally simple in this template
 
